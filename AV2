@@ -22,7 +22,7 @@ CREATE TABLE Morador (
 );
 
 CREATE TABLE Sindico (
-    idSindico INT AUTO_INCREMENT,
+    idSindico INT NOT NULL,
     inicioMandato DATE,
     fimMandato DATE,
     Condominios_idCondominio VARCHAR(8)
