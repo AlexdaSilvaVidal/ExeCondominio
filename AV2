@@ -1,0 +1,119 @@
+-- Criação das tabelas-------------------
+
+CREATE TABLE Condominio (
+    idCondominio VARCHAR(8) NOT NULL,
+    nome VARCHAR(50) NOT NULL,
+    endereco VARCHAR(60) NOT NULL,
+    num INT NOT NULL,
+    cep VARCHAR(15) NOT NULL,
+    bairro VARCHAR(30) NOT NULL,
+    cidade VARCHAR(20) NOT NULL,
+    estado CHAR(15) NOT NULL,
+    proprietario VARCHAR(45),
+    cnpj VARCHAR(15)
+);
+
+CREATE TABLE Morador (
+    idMorador INT NOT NULL,
+    bloco VARCHAR(10) NOT NULL,
+    numApart INT NOT NULL,
+    valorAluguel FLOAT NOT NULL,
+    Condominios_idCondominio VARCHAR(8)
+);
+
+CREATE TABLE Sindico (
+    idSindico INT AUTO_INCREMENT,
+    inicioMandato DATE,
+    fimMandato DATE,
+    Condominios_idCondominio VARCHAR(8)
+);
+
+CREATE TABLE Condominos (
+    idCondomino VARCHAR(10),
+    nome VARCHAR(50) NOT NULL,
+    cpf VARCHAR(15) NOT NULL UNIQUE,
+    email VARCHAR(50),
+    senha VARCHAR(50) NOT NULL,
+    user VARCHAR(50) NOT NULL,
+    Condominios_idCondominio VARCHAR(8)
+);
+
+CREATE TABLE Tarefas (
+    idTarefa INT,
+    nome VARCHAR(45) NOT NULL,
+    status VARCHAR(15) NOT NULL,
+    dataConclusao DATE,
+    descricao VARCHAR(45),
+    Condominios_idCondominio VARCHAR(8)
+);
+
+CREATE TABLE Portaria (
+    idPortaria INT,
+    portaria VARCHAR(45) NOT NULL,
+    Condominios_idCondominio VARCHAR(8)
+);
+
+CREATE TABLE Mensagem (
+    id INT,
+    destinatario VARCHAR(50) NOT NULL,
+    mensagem VARCHAR(50) NOT NULL,
+    Condominios_idCondominio VARCHAR(8),
+    Portaria_idPortaria INT
+);
+
+CREATE TABLE Solicitacoes (
+    idSolicitacao INT,
+    solicitacao VARCHAR(50) NOT NULL,
+    justificativa VARCHAR(60),
+    Condominios_idCondominio VARCHAR(8)
+);
+
+-- Adição de chaves primárias-------------------------------------
+
+ALTER TABLE Condominio
+ADD CONSTRAINT PK_Condominio PRIMARY KEY (idCondominio);
+
+ALTER TABLE Morador
+ADD CONSTRAINT PK_Morador PRIMARY KEY (idMorador);
+
+ALTER TABLE Sindico
+ADD CONSTRAINT PK_Sindico PRIMARY KEY (idSindico);
+
+ALTER TABLE Condominos
+ADD CONSTRAINT PK_Condominos PRIMARY KEY (idCondomino);
+
+ALTER TABLE Tarefas
+ADD CONSTRAINT PK_Tarefas PRIMARY KEY (idTarefa);
+
+ALTER TABLE Portaria
+ADD CONSTRAINT PK_Portaria PRIMARY KEY (idPortaria);
+
+ALTER TABLE Mensagem
+ADD CONSTRAINT PK_Mensagem PRIMARY KEY (id);
+
+ALTER TABLE Solicitacoes
+ADD CONSTRAINT PK_Solicitacoes PRIMARY KEY (idSolicitacao);
+
+-- Adição de chaves estrangeiras-----------------------------------------------
+
+ALTER TABLE Morador
+ADD CONSTRAINT FK_Morador_Condominio FOREIGN KEY (Condominios_idCondominio) REFERENCES Condominio(idCondominio);
+
+ALTER TABLE Sindico
+ADD CONSTRAINT FK_Sindico_Condominio FOREIGN KEY (Condominios_idCondominio) REFERENCES Condominio(idCondominio);
+
+ALTER TABLE Condominos
+ADD CONSTRAINT FK_Condominos_Condominio FOREIGN KEY (Condominios_idCondominio) REFERENCES Condominio(idCondominio);
+
+ALTER TABLE Tarefas
+ADD CONSTRAINT FK_Tarefas_Condominio FOREIGN KEY (Condominios_idCondominio) REFERENCES Condominio(idCondominio);
+
+ALTER TABLE Portaria
+ADD CONSTRAINT FK_Portaria_Condominio FOREIGN KEY (Condominios_idCondominio) REFERENCES Condominio(idCondominio);
+
+ALTER TABLE Mensagem
+ADD CONSTRAINT FK_Mensagem_Condominio FOREIGN KEY (Condominios_idCondominio) REFERENCES Condominio(idCondominio),
+ADD CONSTRAINT FK_Mensagem_Portaria FOREIGN KEY (Portaria_idPortaria) REFERENCES Portaria(idPortaria);
+
+ALTER TABLE Solicitacoes
+ADD CONSTRAINT FK_Solicitacoes_Condominio FOREIGN KEY (Condominios_idCondominio) REFERENCES Condominio(idCondominio);
